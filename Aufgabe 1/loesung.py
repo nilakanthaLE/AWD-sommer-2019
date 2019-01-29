@@ -1,17 +1,5 @@
 import time
-import os
-
-def cls():
-    os.system('cls' if os.name=='nt' else 'clear')
-
-#helper
-def einrueckung():
-    print("  ", end="")
-def printTabs(anzahl):
-    _str = "\r"
-    for _ in range(0,anzahl):
-        _str += "\t"
-    print(_str,end="")
+import helper
 
 #Counter
 # eine Klasse, die ein integer enthält
@@ -27,7 +15,6 @@ class Counter:
     def printCounter(self):
         print("count: ",end="")
         print(str(self.i) +"\r",end="")
-
 counter = Counter()
 
 #fibNaiv
@@ -55,7 +42,12 @@ def fibBesser(n):
         ergebnis = (ergebnis[0]+ergebnis[1],ergebnis[0])
     return ergebnis[0]
 
-
+#FibFuncTest
+# dient zur Berechnung der gesuchten Fibonacci Zahl einer Funktion
+# ermittelt Testwerte (Dauer, Anzahl Iterationen)
+# erzeugt Ausdruck der Werte auf der Konsole
+# @init func: die verwendete Funktion
+# @init n: die gesuchte Stelle in der Fibonacci-Reihe
 class FibFuncTest:
     #init Objekt mit Funktion und n
     def __init__(self,func,n):
@@ -80,13 +72,13 @@ class FibFuncTest:
     def dauer(self):
         return self.ende - self.start
     def printDauer(self):
-        einrueckung()
+        helper.einrueckung()
         print("dauer: " + str(self.dauer()) + "s")
     def printIterationen(self):
-        einrueckung()
+        helper.einrueckung()
         print("Anzahl Schritte: " + str(self.iterationen))
     def printErgebnis(self):
-        einrueckung()
+        helper.einrueckung()
         print("%s. Stelle der Fibonacci-Reihe ist: "%self.n  + str(self.ergebnis))
 
     #HauptFunktion 1 - gibt vollständiges Ergebnis aus
@@ -104,9 +96,11 @@ class FibFuncTest:
 
 
 
-
+# Methode für den Vergleich von Funktionen
+# 1) zeigt Testergebnis jeder Funktion
+# 2) erstellt Tabelle mit Schritten und Dauer, sortiert nach Dauer
 def vergleich(funcs,n):
-    cls()
+    helper.cls()
     funcTests = []
     for func in funcs:
         funcTest = FibFuncTest(func,n)
@@ -115,25 +109,23 @@ def vergleich(funcs,n):
 
     print("Unterschiede zwischen den Funktionen\n")
     print("Funktion",end="")
-    printTabs(2)
+    helper.printTabs(2)
     print("Schritte",end="")
-    printTabs(4)
+    helper.printTabs(4)
     print("Dauer")
+    funcTests.sort(key=lambda _:_.dauer())
     for funcTest in funcTests:
         print(funcTest.funcName(),end="")
-        printTabs(2)
+        helper.printTabs(2)
         print(str(funcTest.iterationen),end="")
-        printTabs(4)
+        helper.printTabs(4)
         print(str(funcTest.dauer()))
-
-vergleich([fibNaiv,fibBesser],7)
 
 # Methode zur Ermittlung der Rechenschritte der naiven Funktion für die Fibonacci Berechnung
 # Die Vorschrift für die Berechnung lautet:
 # f(0) = 1
 # f(1) = 1
 # f(n) = f(n-1) + f(n-2) + 1 ( ab n>= 2 )
-
 def calcFibNaivCount(n):
     if n==0 or n==1: return 1
 
@@ -146,4 +138,8 @@ def printCalcFibNaivCount(n):
     schritte = str(calcFibNaivCount(n))
     print("\nfibNaiv benötigt %s Schritte zur Berechnung der %s.Stelle der Fibanacci-Reihe\n\n"%(schritte,n))
 
+
+#Aufruf der zu testenden Funktionen und der gesuchten Stelle der Fibonacci-Reihe
+# Berechnung der Iterationen für naive Implementierung der Fibonacci-Funktion
+vergleich([fibNaiv,fibBesser],25)
 printCalcFibNaivCount(5)
