@@ -4,6 +4,15 @@ import os
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
 
+#helper
+def einrueckung():
+    print("  ", end="")
+def printTabs(anzahl):
+    _str = "\r"
+    for _ in range(0,anzahl):
+        _str += "\t"
+    print(_str,end="")
+
 #Counter
 # eine Klasse, die ein integer enthält
 # dient zur Speicherung der Anzahl von Iterationen über die Fibonacci-Funktionen
@@ -71,13 +80,13 @@ class FibFuncTest:
     def dauer(self):
         return self.ende - self.start
     def printDauer(self):
-        self.einrueckung()
+        einrueckung()
         print("dauer: " + str(self.dauer()) + "s")
     def printIterationen(self):
-        self.einrueckung()
+        einrueckung()
         print("Anzahl Schritte: " + str(self.iterationen))
     def printErgebnis(self):
-        self.einrueckung()
+        einrueckung()
         print("%s. Stelle der Fibonacci-Reihe ist: "%self.n  + str(self.ergebnis))
 
     #HauptFunktion 1 - gibt vollständiges Ergebnis aus
@@ -93,9 +102,8 @@ class FibFuncTest:
         self.calc()
         self.printTestErgebnis()
 
-    #helper
-    def einrueckung(self):
-        print("  ", end="")
+
+
 
 def vergleich(funcs,n):
     cls()
@@ -105,13 +113,27 @@ def vergleich(funcs,n):
         funcTests.append(funcTest)
         funcTest.calcAndPrintErgebnis()
 
+    print("Unterschiede zwischen den Funktionen\n")
+    print("Funktion",end="")
+    printTabs(2)
+    print("Schritte",end="")
+    printTabs(4)
+    print("Dauer")
+    for funcTest in funcTests:
+        print(funcTest.funcName(),end="")
+        printTabs(2)
+        print(str(funcTest.iterationen),end="")
+        printTabs(4)
+        print(str(funcTest.dauer()))
+
 vergleich([fibNaiv,fibBesser],7)
 
 # Methode zur Ermittlung der Rechenschritte der naiven Funktion für die Fibonacci Berechnung
 # Die Vorschrift für die Berechnung lautet:
 # f(0) = 1
 # f(1) = 1
-# f(n) = f(n-1) + f(n-2) + 1 - ab n>= 2
+# f(n) = f(n-1) + f(n-2) + 1 ( ab n>= 2 )
+
 def calcFibNaivCount(n):
     if n==0 or n==1: return 1
 
@@ -122,6 +144,6 @@ def calcFibNaivCount(n):
 
 def printCalcFibNaivCount(n):
     schritte = str(calcFibNaivCount(n))
-    print("fibNaiv benötigt %s Schritte zur Berechnung der %s.Stelle der Fibanacci-Reihe"%(schritte,n))
+    print("\nfibNaiv benötigt %s Schritte zur Berechnung der %s.Stelle der Fibanacci-Reihe\n\n"%(schritte,n))
 
 printCalcFibNaivCount(5)
