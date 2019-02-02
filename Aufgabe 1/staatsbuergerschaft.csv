@@ -1,0 +1,40 @@
+su-d-01.05.11.07;;Anteil der Bevölkerung, die ein bzw. kein Gesuch um den Erwerb der Schweizer Staatsbürgerschaft gestellt hat, nach soziodemografischen Merkmalen und Sprachregion, in %, 2014;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+;;Kein Einbürgerungsgesuch;;Einbürgerungsgesuch;;;;;;;;;;;;;
+;;"Anteil
+in %";"Vertrauens-intervall
+± (in %)";"Anteil
+in %";"Vertrauens-intervall
+± (in %)";;;;;;;;;;;;
+Total 1;;	87,1;	2,3;	12,0;	8,2;;;;;;;;;;;;
+Migrationsstatus;Bevölkerung ohne Migrationshintergrund 2;X;X;X;X;;;;;;;;;;;;
+;1. Generation mit Migrationshintergrund;	88,2;	2,4;	11,0;	9,1;;;;;;;;;;;;
+;2. Generation mit Migrationshintergrund;	80,3;	6,7;	19,2;	18,8;;;;;;;;;;;;
+Geschlecht;Männer;	87,3;	3,2;	12,1;	11,4;;;;;;;;;;;;
+;Frauen;	87,0;	3,3;	11,9;	11,5;;;;;;;;;;;;
+Altersgruppe;15–24;	81,0;	7,6;	17,6;	19,6;;;;;;;;;;;;
+;25–39;	89,7;	3,8;	10,1;	15,3;;;;;;;;;;;;
+;40–54;	84,9;	3,9;	13,8;	12,8;;;;;;;;;;;;
+;55–64;	88,5;	6,0;	10,6;	24,6;;;;;;;;;;;;
+;65–74;	93,2;	6,5;(6,1);	36,1;;;;;;;;;;;;
+Staatsangehörigkeit;Schweiz;*;*;*;*;;;;;;;;;;;;
+;EU28 und EFTA;	91,5;	2,8;	7,7;	11,7;;;;;;;;;;;;
+;Andere europäische Staaten;	75,1;	6,6;	23,8;	13,9;;;;;;;;;;;;
+;Andere Staaten;	81,4;	6,8;	18,1;	17,1;;;;;;;;;;;;
+Bildungsniveau;Obligatorische Schule;	83,6;	4,3;	14,6;	12,6;;;;;;;;;;;;
+;Sekundarstufe II;	86,0;	3,8;	13,3;	13,5;;;;;;;;;;;;
+;Tertiärstufe;	91,8;	3,9;	8,2;	17,0;;;;;;;;;;;;
+Sprachregion;Deutsche und rätoromanische Schweiz;	87,4;	2,9;	11,6;	10,4;;;;;;;;;;;;
+;Französische Schweiz;	86,4;	4,3;	13,3;	14,2;;;;;;;;;;;;
+;Italienische Schweiz;	88,7;	6,4;	10,8;	32,1;;;;;;;;;;;;
+Ständige Wohnbevölkerung im Alter von 15 bis 74 Jahren. Ergebnisse aus einer Personenverteilung.;;;;;;;;;;;;;;;;;
+Ungewichtete Anzahl Personen: n (ausländische und staatenlose Personen mit B- oder C-Ausweis) = 6903. Gesamtstichprobe SAKE: n (Total) = 22816.;;;;;;;;;;;;;;;;;
+1 Antwortausfälle werden bei der Berechnung der Anteile berücksichtigt, aber in dieser Tabelle nicht dargestellt.;;;;;;;;;;;;;;;;;
+2 Angehörige der dritten Generation: in der Schweiz geborene Ausländerinnen und Ausländer, deren Eltern in der Schweiz geboren wurden.;;;;;;;;;;;;;;;;;
+(): Extrapolation aufgrund von weniger als 50 Beobachtungen: Diese Ergebnisse sind statistisch nicht zuverlässig.;;;;;;;;;;;;;;;;;
+X: Extrapolation aufgrund von weniger als 5 Beobachtungen: Die Resultate werden aus Datenschutzgründen nicht publiziert.;;;;;;;;;;;;;;;;;
+*: Nicht angegeben, da offensichtlich oder nicht relevant.;;;;;;;;;;;;;;;;;
+Quelle: Schweizerische Arbeitskräfteerhebung (SAKE), Modul Migration;;;;;;;;;;;;;;;;;
+© BFS;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;
+Auskunft: Bundesamt für Statistik (BFS), Sektion Demografie und Migration, info.dem@bfs.admin.ch, Tel. 058 463 67 11;;;;;;;;;;;;;;;;;

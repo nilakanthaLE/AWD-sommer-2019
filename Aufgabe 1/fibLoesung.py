@@ -9,7 +9,7 @@ class Counter:
     def count(self):
         self.i += 1
         #für Zeitmessung auskommentieren
-        # zeigt, dass die (naive) Berechnung bei n>40  sehr lange läuft
+        # zeigt, dass die (naive) Berechnung bei n>30  sehr lange läuft
         self.printCounter()
 
     def printCounter(self):
@@ -21,12 +21,8 @@ counter = Counter()
 # die naive Implementierung der Berechnung der nten Fibonacci Zahl
 # @param n: welche Stelle in der Fibonacci-Reihe ist gesucht?
 def fibNaiv(n):
-    # Counter
     counter.count()
-
-    if n==0: return 0
-    if n==1: return 1
-    return fibNaiv(n-1) + fibNaiv(n-2)
+    return n if (n<2) else fibNaiv(n-1) + fibNaiv(n-2)
 
 #fibBesser
 # optimierte Berechnung der nten Fibonacci Zahl
@@ -38,7 +34,6 @@ def fibBesser(n):
     for _ in range(1,n):
         # Counter
         counter.count()
-
         ergebnis = (ergebnis[0]+ergebnis[1],ergebnis[0])
     return ergebnis[0]
 
@@ -66,11 +61,9 @@ class FibFuncTest:
         self.iterationen    = counter.i
         #self.dauer          = counter.dauer
 
-    #Ausdruck der Ergebnis Zeilen
-    def printHeadline(self):
-        print("\nCounter für " + self.funcName() + "(%s)"%str(self.n))
-    def dauer(self):
-        return self.ende - self.start
+    #Methoden für den Ausdruck der Ergebnis Zeilen
+    def printHeadline(self): print("\nCounter für " + self.funcName() + "(%s)"%str(self.n))
+    def dauer(self): return self.ende - self.start
     def printDauer(self):
         helper.einrueckung()
         print("dauer: " + str(self.dauer()) + "s")
@@ -141,5 +134,5 @@ def printCalcFibNaivCount(n):
 
 #Aufruf der zu testenden Funktionen und der gesuchten Stelle der Fibonacci-Reihe
 # Berechnung der Iterationen für naive Implementierung der Fibonacci-Funktion
-vergleich([fibNaiv,fibBesser],25)
-printCalcFibNaivCount(5)
+vergleich([fibNaiv,fibBesser],20)
+printCalcFibNaivCount(20)
