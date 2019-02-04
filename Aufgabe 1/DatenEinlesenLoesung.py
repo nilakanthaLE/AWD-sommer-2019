@@ -2,6 +2,7 @@ import csv
 import helper
 from functools import reduce
 
+
 #dritter Ansatz
 # Datenblock wird durch explizite Angabe der Anzahl von cols und rows für die Beschreibung eingegrenzt
 
@@ -75,13 +76,23 @@ def filterLeerIn(row):
 # @param descCols: Anzahl der Spalten in der css für Beschreibung (Reihenbeschriftung)
 # @param descRows: Anzahl der Reihen in der css für Beschreibung (Spaltenbeschriftung)
 # @param rows: das Set an Datenreihen aus der css
-def getData(allowedStrings,descCols,descRows,rows):
-    rows    = list(map(lambda row:row[descCols:],rows))                        # die Spalten für die Beschreibung der Reihen herausschneiden
+def getData(allowedStrings,rows):
     rows    = list(map(lambda row:cleanRow(row,allowedStrings),rows))   # die Reihen säubern -> nur Werte oder erlaubte Strings, rest leere Strings
     rows    = list(map(lambda row:row[:findLastDataCol(rows)+1],rows))  # die Spalten hinter dem letzten Wert im Datenblock herausschneiden
-    rows    = rows[descRows:]                                           # die Reihen vor der ersten Datenreihe herausschneiden
     rows    = list(filter(lambda row:len(filterLeerIn(row)) > 0,rows))  # Reihen in denen nur leere Strings vorkommen herausschneiden (hinter der letzten Datenreihe)
-    return rows
+
+    descCols = 0
+    descRows = 0
+    ende = False
+    while not ende:
+        _rows    = list(map(lambda row:row[descCols:],rows))            # die Spalten für die Beschreibung der Reihen herausschneiden
+        _rows    = _rows[descRows:]                                     # die Reihen vor der ersten Datenreihe herausschneiden
+        for row in _rows: print(row)
+        ende = helper.inputTillAllowed(["j","n"],"[OK? j/n] ") == "j"          # Beendet mit j, falls der Datenblock korrekt isoliert wurde
+        if not ende:
+            descRows = helper.inputTillInt("Anzahl Zeilen für Beschreibung: ")
+            descCols = helper.inputTillInt("Anzahl Spalten für Beschreibung: ")
+    return _rows
 
 #Methode,
 # die in allen Strings eines Sets von Reihen unerwünschte (Teil)Strings löscht
@@ -90,9 +101,9 @@ def getData(allowedStrings,descCols,descRows,rows):
 def deleteStringsToDelete(rows,stringsToDelete):
     return list(map(lambda row: list(map(lambda cell: helper.replaceMultiple(cell,stringsToDelete,""),row)),rows))
 
-def getRowDescription():
+def getRowDescription(): 
     return [[""]]
-def getColDescription():
+def getColDescription(): 
     return [[""]]
 
 # csv öffnen und ein Set von Reihen für die weitere Bearbeitung zurückgeben
@@ -100,39 +111,29 @@ def csvImport(param):
     _csv_ = param[0]
     toDelete = param[1]
     allowedStrings = param[2]
-    descCols = param[3]
-    descRows = param[4]
     with open(_csv_) as lines:
         rows = list(csv.reader(lines, delimiter=";"))
         rows = deleteStringsToDelete(rows,toDelete) #säubern
-    return getData(allowedStrings,descCols,descRows,rows)
+    return getData(allowedStrings,rows)
 
 #Parameter für Testaufruf
 pendler = "pendler.csv"
 pendlerToDelete = [" "]  #komisches Zeichen in Zahlen
 pendlerAllowed = ["..."]
-pendlerDescCols = 2
-pendlerDescRows = 6
-pendlerParam = (pendler,pendlerAllowed,pendlerToDelete,pendlerDescCols,pendlerDescRows)
+pendlerParam = (pendler,pendlerAllowed,pendlerToDelete)
 
 staatsbuergerschaft = "staatsbuergerschaft.csv"
 staatsbuergerschaftToDelete = []
 staatsbuergerschaftAllowed = ["X","*"]  # enthält relevante Zellen mit "X" oder "*"
-staatsbuergerschaftDescCols = 2
-staatsbuergerschaftDescRows = 0 #keine Angabe notwendig (keine Beschreibung, die in floats umgewandelt würden [Bsp.: Jahreszahlen])
-staatsbuergerschaftParam = (staatsbuergerschaft,staatsbuergerschaftAllowed,staatsbuergerschaftToDelete,staatsbuergerschaftDescCols,staatsbuergerschaftDescRows)
+staatsbuergerschaftParam = (staatsbuergerschaft,staatsbuergerschaftAllowed,staatsbuergerschaftToDelete)
 
 geburten = "geburten_kantone.csv"
 geburtenToDelete = []
 geburtenAllowed = []
-geburtenDescCols = 1
-geburtenDescRows = 5
-geburtenParam   = (geburten,geburtenAllowed,geburtenToDelete,geburtenDescCols,geburtenDescRows)
-
-
+geburtenParam   = (geburten,geburtenAllowed,geburtenToDelete)
 
 #Testaufruf
 helper.cls()
-data = csvImport(geburtenParam)
+data = csvImport(pendlerParam)
 for row in data:
     print(row)

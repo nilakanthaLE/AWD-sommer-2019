@@ -6,15 +6,17 @@ import helper
 # dient zur Speicherung der Anzahl von Iterationen über die Fibonacci-Funktionen
 class Counter:
     i = 0
+    displayCounter = False
     def count(self):
         self.i += 1
-        #für Zeitmessung auskommentieren
-        # zeigt, dass die (naive) Berechnung bei n>30  sehr lange läuft
-        self.printCounter()
+
+        #verfälscht Zeitmessung!
+        # zeigt, dass die (naive) Berechnung bei n>40  sehr lange läuft
+        if displayCounter : self.printCounter()
 
     def printCounter(self):
         print("count: ",end="")
-        print(str(self.i) +"\r",end="")
+        print(str("{:,d}".format(self.i)) +"\r",end="")
 counter = Counter()
 
 #fibNaiv
@@ -52,14 +54,14 @@ class FibFuncTest:
         return self.func.__name__
 
     #Berechnung, sowie Erfassung von Schritten und Dauer
-    def calc(self):
+    def calc(self,displayCounter):
         counter.i = 0
         counter.dauer = 0
+        counter.displayCounter = displayCounter
         self.start          = time.time()
         self.ergebnis       = self.func(self.n)
         self.ende           = time.time()
         self.iterationen    = counter.i
-        #self.dauer          = counter.dauer
 
     #Methoden für den Ausdruck der Ergebnis Zeilen
     def printHeadline(self): print("\nCounter für " + self.funcName() + "(%s)"%str(self.n))
@@ -83,22 +85,27 @@ class FibFuncTest:
         print("\n")
 
     #HauptFunktion 2 - berechnet und gibt vollständiges Ergebnis aus
-    def calcAndPrintErgebnis(self):
-        self.calc()
+    def calcAndPrintErgebnis(self,displayCounter):
+        self.calc(displayCounter)
         self.printTestErgebnis()
 
+
+def printUeberschrift():
+    
+    print("#Programm zur Berechnung von Stellen der Fibonacci Reihe")
+    print("#\tVergleicht Effizienz verschiedener Berechnungsmethoden\n")
 
 
 # Methode für den Vergleich von Funktionen
 # 1) zeigt Testergebnis jeder Funktion
 # 2) erstellt Tabelle mit Schritten und Dauer, sortiert nach Dauer
-def vergleich(funcs,n):
-    helper.cls()
+def vergleich(funcs,n,displayCounter):
+    #printUeberschrift()
     funcTests = []
     for func in funcs:
         funcTest = FibFuncTest(func,n)
         funcTests.append(funcTest)
-        funcTest.calcAndPrintErgebnis()
+        funcTest.calcAndPrintErgebnis(displayCounter)
 
     print("Unterschiede zwischen den Funktionen\n")
     print("Funktion",end="")
@@ -121,18 +128,29 @@ def vergleich(funcs,n):
 # f(n) = f(n-1) + f(n-2) + 1 ( ab n>= 2 )
 def calcFibNaivCount(n):
     if n==0 or n==1: return 1
-
     ergebnis = (1,1)
     for _ in range(2,n+1):
         ergebnis = (ergebnis[0]+ergebnis[1] + 1,ergebnis[0])
     return ergebnis[0]
 
 def printCalcFibNaivCount(n):
-    schritte = str(calcFibNaivCount(n))
-    print("\nfibNaiv benötigt %s Schritte zur Berechnung der %s.Stelle der Fibanacci-Reihe\n\n"%(schritte,n))
+    print("\nfibNaiv benötigt %i Schritte zur Berechnung der %i.Stelle der Fibanacci-Reihe\n\n"%(calcFibNaivCount(n),n))
 
 
 #Aufruf der zu testenden Funktionen und der gesuchten Stelle der Fibonacci-Reihe
 # Berechnung der Iterationen für naive Implementierung der Fibonacci-Funktion
-vergleich([fibNaiv,fibBesser],20)
-printCalcFibNaivCount(20)
+#vergleich([fibNaiv,fibBesser],20)
+#printCalcFibNaivCount(20)
+stop = ""
+while(stop != "stop"):
+    helper.cls()
+    printUeberschrift()
+
+    fibN            = helper.inputTillInt("Welche Stelle der Fibonacci-Reihe soll berechnet werden? [Ganzzahl]: ")
+    displayCounter  = helper.inputTillAllowed(["j","n"], "Soll der Counter angezeigt werden? (verfälscht die Zeiterfassung!) [j/n] :"  )
+    displayCounter = True if displayCounter == "j" else False
+
+    printCalcFibNaivCount(fibN)
+    vergleich([fibNaiv,fibBesser],fibN,displayCounter)
+    
+    stop = input("weiter? [stop]: ")
