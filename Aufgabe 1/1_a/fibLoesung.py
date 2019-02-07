@@ -179,3 +179,5 @@ def main():
         vergleich([fibNaiv,fibBesser,fibDirekt],fibN,displayCounter)
         stop = input("\nweiter? [stop]: ")
 main()
+
+##
