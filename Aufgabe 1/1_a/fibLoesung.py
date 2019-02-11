@@ -6,7 +6,7 @@ import helper
 ##################################
 
 #fibNaiv
-# naive Implementierung der Berechnung der nten Fibonacci Zahl
+# naive (rekursive) Implementierung der Berechnung der nten Fibonacci Zahl
 # @param n: die gesuchte Stelle in der Fibonacci-Folge
 def fibNaiv(n):
     counter.count()
@@ -31,7 +31,7 @@ def fibBesser(n):
 def fibDirekt(n):
     counter.count()
     wurzel5 = 5.0**(1/2)
-    return int(1.0/wurzel5 * ( ((1.0+wurzel5)/2.0)**n - ((1.0-wurzel5)/2.0)**n)) # int() wegen Rundunsfehler
+    return int(1.0/wurzel5 * ( ((1.0+wurzel5)/2.0)**n - ((1.0-wurzel5)/2.0)**n)) # int() wegen Rundungsfehler
 
 #Methode zur Ermittlung der Rechenschritte der naiven Funktion für die Fibonacci Berechnung
 # Die Vorschrift für die Berechnung lautet:
@@ -50,7 +50,7 @@ def calcFibNaivCount(n):
 ###########
 
 #class Counter
-# eine Klasse, die ein integer enthält
+# eine Klasse, die einen integer enthält
 #   dient zur Speicherung der Anzahl von Iterationen über die Fibonacci-Funktionen
 #   displayCounter bestimmt, ob bei der Berechnung ein Counter angezeigt werden soll 
 #       die Anzeige des Counters verfälscht die Zeitmessung!
@@ -60,8 +60,6 @@ class Counter:
     displayCounter = False
     def count(self):
         self.i += 1
-        #die Anzeige des Counters verfälscht Zeitmessung!
-        # zeigt aber, dass die (naive) Berechnung bei n>40 (einfach nur) sehr lange läuft
         if self.displayCounter : self.printCounter()
     def printCounter(self):
         print("count: ",end="")
@@ -101,7 +99,7 @@ class FibFuncTest:
     def dauer(self): return self.ende - self.start
     def printDauer(self):
         helper.einrueckung()
-        print("dauer: " + helper.floatStringWithPrecision(self.dauer() *1000,5) + " ms")
+        print("dauer: " + helper.floatStringWithPrecision(self.dauer() *1000,7) + " ms")
     def printIterationen(self):
         helper.einrueckung()
         print("Anzahl Schritte: " + str(self.iterationen))
@@ -146,7 +144,7 @@ def vergleich(funcs,n,displayCounter):
         helper.printTabs(2)
         print(str(funcTest.iterationen),end="")
         helper.printTabs(4)
-        print(helper.floatStringWithPrecision(funcTest.dauer() *1000,5) + " ms")
+        print(helper.floatStringWithPrecision(funcTest.dauer() *1000,7) + " ms")
 
 
 ################
