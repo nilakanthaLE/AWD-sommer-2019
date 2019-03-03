@@ -1,6 +1,8 @@
 import csv
 import helper
+import os
 from functools import reduce
+
 
 
 #dritter Ansatz
@@ -59,28 +61,56 @@ def findLastDataCol(rows):
     lastDataCols = [lastDataColForRow(row) for row in rows]
     return reduce(lambda a,b : a if a>=b else b,lastDataCols)
 
+
+
+
+CSVConfigList = []
+
 #Methode,
 # die alle leeren Strings in einer Reihe herausfiltert
 # @param row: die zu filterende Reihe
 def filterLeerIn(row):
     return [cell for cell in row if cell != ""]
 
-def writeToFile(descRowsAndCols):
-    with open("datenEinlesen.cfg","w") as datei:
-        datei.write(str(descRowsAndCols[0]) + "," + str(descRowsAndCols[1]))
-        datei.close
+def updateCSVConfigList(CSVConfig):
+    for _CSVConfig in CSVConfigList:
+        if _CSVConfig[0] == CSVConfig[0]:
+            _CSVConfig = CSVConfig
+            return
+    CSVConfigList.append(CSVConfig)
+    
 
-def getDescRowsAndColsFromFile():
-    try:datei = open("datenEinlesen.cfg","r")
-    except: return (0,0)
-    try:
-        firstLine = datei.readline()
-        cols,rows = firstLine.split(",")
-        descRowsAndCols = (int(cols),int(rows))
+
+def writeCSVConfigListToFile():
+    with open("datenEinlesen.cfg","w") as datei:
+        for line in [row[0] + "," + str(row[1]) + "," + str(row[2]) + "\n" for row in CSVConfigList]:
+            datei.write(line)
+        datei.close()
+
+
+
+def readCSVConfigListFromFile():
+    CSVConfigList = []
+    try: datei= open("datenEinlesen.cfg","r")
     except: 
-        descRowsAndCols = (0,0)
+        return CSVConfigList
+
+    try:
+        for line in datei.readlines():
+            csvFilename,cols,rows = line.split(",")
+            CSVConfigList.append((csvFilename,int(cols),int(rows)))
+    except: 
+         print("Exception!!!")
     datei.close()
-    return descRowsAndCols
+    return CSVConfigList
+CSVConfigList = readCSVConfigListFromFile()
+
+def getCSVConfigFor(csvFileName):
+    for CSVConfig in CSVConfigList:
+        if csvFileName == CSVConfig[0]:
+            return CSVConfig
+    return (csvFileName,0,0)
+
 
 #Methode,
 # die den Datenblock isoliert, ihn säubert (nur floats,erlaubteStrings,floats in Klammern, leerStrings) und zurück gibt
@@ -88,23 +118,32 @@ def getDescRowsAndColsFromFile():
 # @param descCols: Anzahl der Spalten in der css für Beschreibung (Reihenbeschriftung)
 # @param descRows: Anzahl der Reihen in der css für Beschreibung (Spaltenbeschriftung)
 # @param rows: das Set an Datenreihen aus der css
-def getData(allowedStrings,rows):
+def getCleanDataRows(csvFilename,allowedStrings,rows):
     rows    = [cleanRow(row,allowedStrings) for row in rows]            # die Reihen säubern -> nur Werte oder erlaubte Strings, rest leere Strings
     rows    = [row[:findLastDataCol(rows)+1] for row in rows]           # die Spalten hinter dem letzten Wert im Datenblock herausschneiden
     rows    = [row for row in rows if len(filterLeerIn(row)) > 0]       # Reihen in denen nur leere Strings vorkommen herausschneiden (hinter der letzten Datenreihe) mit [ for in if ]
+    
+    
     ende = False
-    colsAndRows = getDescRowsAndColsFromFile()
-    desCols = colsAndRows[0]
-    desRows = colsAndRows[1]
+    csvConfig = getCSVConfigFor(csvFilename)
+    descCols = csvConfig[1] 
+    descRows = csvConfig[2]
     while not ende:
-        _rows    = [row[desCols:] for row in rows]                     # die Spalten für die Beschreibung der Reihen herausschneiden
-        _rows    = _rows[desRows:]                                     # die Reihen vor der ersten Datenreihe herausschneiden
+        headLine = "# Datenimport von " + csvFilename + " #"
+        print("#"*len(headLine))
+        print(headLine )
+        print("#"*len(headLine))
+        print()
+        _rows    = [row[descCols:] for row in rows]                     # die Spalten für die Beschreibung der Reihen herausschneiden
+        _rows    = _rows[descRows:]                                     # die Reihen vor der ersten Datenreihe herausschneiden
         for row in _rows: print(row)
+        print()
+        print("Es werden "+ str(descRows) + " Zeile(n) und " + str(descCols) + " Spalte(n) für die Beschreibung abgetrennt" )
         ende = helper.inputTillAllowed(["j","n"],"Ist der Datenblock OK? [j/n] ") == "j"   # Beenden mit Eingabe 'j', wenn der Datenblock korrekt isoliert wurde
         if not ende:
-            desCols = helper.inputTillInt("Anzahl Zeilen für Beschreibung: ")
-            desRows = helper.inputTillInt("Anzahl Spalten für Beschreibung: ")
-    return (_rows,(desCols,desRows))
+            descCols = helper.inputTillInt("Anzahl Spalten für Beschreibung: ")
+            descRows = helper.inputTillInt("Anzahl Zeilen für Beschreibung: ")
+    return (_rows,(csvFilename,descCols,descRows))
 
 #Methode,
 # die in allen Strings eines Sets von Reihen unerwünschte (Teil)Strings löscht
@@ -113,24 +152,24 @@ def getData(allowedStrings,rows):
 def deleteStringsToDelete(rows,stringsToDelete):
     return [[helper.replaceMultiple(cell,stringsToDelete,"") for cell in row] for row in rows]
 
-def getRowDescription(): 
-    return [[""]]
-def getColDescription(): 
-    return [[""]]
+
 
 # csv öffnen und ein Set von Reihen für die weitere Bearbeitung zurückgeben
 def csvImport(param):
-    _csv_ = param[0]
+    csvFilename = param[0]
     allowedStrings = param[1]
     toDelete = param[2]
-    with open(_csv_) as lines:
+    path = os.path.dirname(os.path.abspath(__file__))
+    with open(path + "/csv/" +csvFilename) as lines:
         rows = list(csv.reader(lines, delimiter=";"))
         rows = deleteStringsToDelete(rows,toDelete) #säubern
-    data = getData(allowedStrings,rows)
-    writeToFile(data[1])
-    return data[0]
+    dataRows = getCleanDataRows(csvFilename,allowedStrings,rows)
+    updateCSVConfigList(dataRows[1])
+    writeCSVConfigListToFile()
+    return dataRows[0]
 
 #Parameter für Testaufruf
+
 pendler = "pendler.csv"
 pendlerToDelete = [" "]  #komisches Zeichen in Zahlen
 pendlerAllowed = ["..."]
@@ -146,7 +185,7 @@ geburtenToDelete = []
 geburtenAllowed = []
 geburtenParam   = (geburten,geburtenAllowed,geburtenToDelete)
 
+
 #Testaufruf
 helper.cls()
-data = csvImport(geburtenParam)
-for row in data:print(row) 
+data = csvImport(staatsbuergerschaftParam)
