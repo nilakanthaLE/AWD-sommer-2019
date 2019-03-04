@@ -155,8 +155,14 @@ def vergleich(funcs,n,displayCounter):
 def printCalcFibNaivCount(n):
     print("\nfibNaiv benötigt "+ "{:,d}".format(calcFibNaivCount(n)) + " Schritte zur Berechnung der %i.Stelle der Fibanacci-Folge\n"%n)
 def printUeberschrift():
-    print("#Programm zur Berechnung von Stellen der Fibonacci Folge")
-    print("#\tVergleicht Effizienz verschiedener Berechnungsmethoden\n")
+    
+    headLine1 = "# Programm zur Berechnung von Stellen der Fibonacci Folge #"
+    headLine2 = "#  Vergleicht Effizienz verschiedener Berechnungsmethoden #"
+    print("#"*len(headLine1))
+    print(headLine1 )
+    print(headLine2 )
+    print("#"*len(headLine1))
+    print()
 
 ## Programmaufruf mit Userinteraktion
 # 1) Fragt User, welche Stelle der Fibanacci-Folge berechnet werden soll.
